@@ -2,7 +2,7 @@
 paths: "**/*.{clj,cljs,cljc}"
 ---
 
-## Clojure Guidelines
+## Clojure files (*.clj, *.cljs, *.cljc)
 
 Write idiomatic Clojure, not imperative or OO code in Clojure syntax: lean on the
 core library and let data flow through small pure functions. Conciseness serves
