@@ -1,0 +1,23 @@
+# ~/.claude is Claude Code's live working directory. It holds conversation
+# transcripts, shell snapshots, caches, telemetry and (on some platforms)
+# credentials, and the tool creates new state files here without warning.
+#
+# So: ignore everything by default, then re-include only hand-authored config.
+# Anything new that Claude Code drops in here stays untracked automatically.
+
+*
+
+# --- Authored configuration (the only tracked content) ---
+!.gitignore
+!CLAUDE.md
+!settings.json
+
+!rules/
+!rules/**
+
+!skills/
+!skills/**
+
+# --- Re-ignore noise inside the paths above (last match wins) ---
+.DS_Store
+**/.DS_Store
