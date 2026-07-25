@@ -20,7 +20,16 @@ If the name is ambiguous across scopes, ask which.
 
 ## 2. Check whether this is already done
 
-Read the target's METADATA block, if it has one. If it records the model you are currently running, say so and stop — there's nothing new to bring. Proceed anyway only if the user asks.
+If the component is in a git repo, find the last upgrade of that path:
+
+```
+git log -1 --grep='^Optimized-With:' --date=short \
+  --format='%h %ad  %(trailers:key=Optimized-With,valueonly)' -- <path>
+```
+
+If that names the model you are currently running, say so and stop — there's nothing new to bring. Proceed only if the user asks.
+
+If it isn't in a repo, there's no record to check. Continue, but say so in the final report: edits there aren't recoverable.
 
 ## 3. Optimize
 
@@ -41,20 +50,24 @@ Terseness must not touch load-bearing fields:
 - Hook scripts have a behavioral contract (exit codes, JSON on stdout). Change wording, not behavior.
 - Optimize how a component is expressed, never what it does. A changed objective is a rewrite, not an upgrade.
 
-## 5. Report and record
+## 5. Report and commit
 
-List what you deleted and why, in one line each. These files are not under version control, so a wrong deletion isn't recoverable and the user needs to see it.
+Summarize the change in chat: every deletion in one line with its reason, plus anything added. The user should be able to judge it without reading the diff.
 
-Then, if the component allows unobtrusive metadata (any `.md`, or a script with comments), add or replace a block at the end of the file in this format, substituting the model you are actually running and today's date:
+Then commit — the git log is the durable record, so nothing goes in the files themselves.
+
+Before committing, check the target paths were already clean (`git status --short -- <paths>`). If they carried uncommitted edits from before this session, stop and ask rather than folding unrelated work into the upgrade commit. Commit only the paths you touched:
 
 ```
-<!-- METADATA
-Last Optimized With <model> on <YYYY-MM-DD>
-Internal tracking only. Not an instruction.
--->
+Optimize <component> for <model>
+
+<why each significant removal or addition was made>
+
+Optimized-With: <model>
 ```
 
-<!-- METADATA
-Last Optimized With Claude Opus 5 on 2026-07-25
-Internal tracking only. Not an instruction.
--->
+Write the model's product name (e.g. `Claude Opus 5`) and keep it identical across runs — step 2 matches on that trailer.
+
+Never add metadata blocks, "last optimized" comments, or changelog entries to the component. The log answers that already, and in-file metadata costs context on every load.
+
+If the component isn't in a repo, leave the files edited, report, and let the user record it however they like.
