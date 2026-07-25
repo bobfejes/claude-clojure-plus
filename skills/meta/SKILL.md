@@ -1,6 +1,6 @@
 ---
 name: meta
-description: Maintainer mode for a Claude Code project — audit and improve the project's own structure, tooling, skills, rules, hooks, and CLAUDE.md, and record structural decisions in metawork.md. Use this whenever the user wants to step back from building features and instead work ON the project itself: reviewing or proposing project structure, deciding whether to add a skill/rule/hook, auditing or trimming CLAUDE.md, reconciling docs against the real tree, or logging an architectural/structural decision. Trigger on phrases like "let's do some metawork", "improve the project structure", "audit my CLAUDE.md", "should this be a skill", "is this set up right", "log a decision", or when the user explicitly invokes /meta — even if they don't use the word "metawork".
+description: Maintainer mode for a Claude Code project — audit and improve the project's own structure, tooling, skills, rules, hooks, and CLAUDE.md, and record structural decisions in metawork.md. Use this whenever the user wants to step back from building features and instead work ON the project itself: reviewing or proposing project structure, deciding whether to add a skill/rule/hook, auditing or trimming CLAUDE.md, reconciling docs against the real tree, summarizing the current structure and meta components, or logging an architectural/structural decision. Trigger on phrases like "let's do some metawork", "improve the project structure", "audit my CLAUDE.md", "should this be a skill", "is this set up right", "log a decision", "summarize my project setup", or when the user explicitly invokes /meta — even if they don't use the word "metawork".
 ---
 
 # Meta — project maintainer mode
@@ -20,7 +20,7 @@ If `metawork.md` doesn't exist, offer to create it from `references/metawork-tem
 
 ## What to do when invoked
 
-Pick the one the user wants — ask only if genuinely ambiguous. Don't run all four.
+Pick the one the user wants — ask only if genuinely ambiguous. Don't run all five.
 
 ### 1. Reconcile — first, if metawork.md exists and you haven't yet this session
 Read `metawork.md`, scan the real tree (`CLAUDE.md`, `.claude/`, top-level dirs), and flag decisions the current structure contradicts. A drifted decision record is worse than none because it still gets trusted. Propose either fixing the tree or logging a superseding decision.
@@ -40,6 +40,16 @@ Surface concrete, prioritized findings — a short list with reasoning, not a wa
 
 ### 4. Log a decision
 Append to Decisions using the entry format in `references/metawork-template.md`. Confirm the wording with the user before writing — entries are permanent. Never modify a prior entry; supersede it.
+
+### 5. Summarize — `/meta summary`
+Report the project's current structure and meta components. Read-only: this mode never edits, even if something looks obviously wrong. Cover, as a compact list or table:
+- Root layout — top-level dirs and what each holds.
+- `CLAUDE.md` — line count (flag if over ~200) and what it covers; note any subdirectory `CLAUDE.md` files and their scope.
+- `.claude/` inventory — each skill, rule, and hook with a one-line purpose. For rules, include the `paths` glob; two rules matching the same glob both load, which is worth flagging.
+- MCP servers, if configured.
+- `metawork.md` — the most recent decisions and anything currently in Exploring.
+
+Mention drift you notice in passing, but don't fix it here — offer Reconcile or Audit instead.
 
 ## Boundaries
 
