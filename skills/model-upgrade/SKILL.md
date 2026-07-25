@@ -1,11 +1,32 @@
 ---
 name: model-upgrade
-description: Maintainer mode for Claude meta-tooling. Run when a new Claude model is available to re-optimize a specific component — a skill, rule, hook, CLAUDE.md, or other tooling — for that model. Trigger when the user explicitly invokes /model-upgrade [component], e.g. /model-upgrade skill model-upgrade to run it against this skill itself.
+description: Maintainer mode for Claude meta-tooling. Run when a new Claude model is available to re-optimize a specific component — a skill, rule, hook, CLAUDE.md, or other tooling — for that model. Trigger when the user explicitly invokes /model-upgrade [component], e.g. /model-upgrade skill model-upgrade to run it against this skill itself. Also handles /model-upgrade check-version [component], which reports when each component was last optimized and by which model, without changing anything.
 ---
 
 # Model-upgrade — Claude meta-tooling maintainer mode
 
 A component written for an older model often carries scaffolding a newer one no longer needs: explanations of things now known implicitly, defensive restatements, worked examples that add nothing. This skill strips that back without weakening the component.
+
+Two modes:
+
+- `/model-upgrade check-version [component]` — report only, change nothing. See below.
+- `/model-upgrade [component]` — the upgrade itself, steps 1–5.
+
+## check-version — report, don't touch
+
+Named component: resolve its path as in step 1 and report its last upgrade. Component omitted: report every component in scope.
+
+```
+for f in CLAUDE.md settings.json rules/*.md skills/*/SKILL.md; do
+  r=$(git log -1 --grep='^Optimized-With:' --date=short \
+        --format='%h %ad  %(trailers:key=Optimized-With,valueonly)' -- "$f")
+  printf '%-38s %s\n' "$f" "${r:-never optimized}"
+done
+```
+
+Report the results as a short table, flagging anything whose model differs from the one you are running — those are the candidates for an upgrade run. A path with no matching commit has never been through this skill, which is not a problem in itself; say so without implying it needs fixing.
+
+Then stop. This mode never edits or commits, even if a component looks obviously stale — offer the upgrade command instead and let the user decide.
 
 ## 1. Resolve the target
 
