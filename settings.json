@@ -5,11 +5,11 @@
   },
   "includeCoAuthoredBy": false,
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "mcp__playwright"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "auto"
   },
   "model": "opus",
   "enabledPlugins": {
@@ -21,5 +21,10 @@
     "pr-review-toolkit@claude-plugins-official": true
   },
   "tui": "fullscreen",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "agentPushNotifEnabled": true,
   "voiceEnabled": true
 }
