@@ -10,6 +10,8 @@
 # --- Authored configuration (the only tracked content) ---
 !.gitignore
 !CLAUDE.md
+!LICENSE
+!README.md
 !settings.json
 
 !rules/
