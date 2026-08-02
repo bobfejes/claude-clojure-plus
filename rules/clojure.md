@@ -74,10 +74,9 @@ stages and the seq is consumed once. Single-stage one-shot work stays `(map f xs
   signature already say. In-function comments are rare and usually signal unclear
   code. `;;` above a line, `;` trailing.
 - `comment` blocks at the bottom of a namespace hold scratch expressions showing
-  how to invoke the code; a trailing `,` keeps the last form easy to edit:
+  how to invoke the code:
   ```
   (comment
     (process-batch (load-fixtures :small))
-    (reset-state!)
-    ,)
+    (reset-state!))
   ```
