@@ -13,6 +13,7 @@
 !LICENSE
 !README.md
 !settings.json
+!statusline.sh
 
 !rules/
 !rules/**
