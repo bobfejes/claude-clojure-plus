@@ -20,9 +20,6 @@
       "effortLevel": "high"
     }
   },
-  "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "opus"
-  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
