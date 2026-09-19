@@ -20,6 +20,7 @@
 
 !skills/
 !skills/**
+skills/synced
 
 # --- Re-ignore noise inside the paths above (last match wins) ---
 .DS_Store
