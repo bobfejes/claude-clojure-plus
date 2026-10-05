@@ -1,8 +1,10 @@
 #!/bin/bash
-# Status line: "5% - 33% 3h16m - 11% Sun1:00p" = context used, then each budget's
-# used share paired with when it comes back — the 5-hour as a countdown, the
-# 7-day as the local weekday and clock time it renews. Any percentage at 90% or
-# above is printed in red.
+# Status line: "Opus 5.5 medium - 5% - 33% 3h16m - 11% Sun1:00p" = model and
+# effort level, context used, then each budget's used share paired with when it
+# comes back — the 5-hour as a countdown, the 7-day as the local weekday and
+# clock time it renews. Any percentage at 90% or above is printed in red.
+# The model segment shows even before the first API call; effort may be absent
+# for models without effort control, leaving just the model name.
 # context_window is null before the first API call and right after /compact;
 # rate_limits only exists for Claude.ai subscribers after the first API response.
 # resets_at is a Unix epoch in seconds. Missing percentages hold their slot as
@@ -24,9 +26,11 @@ jq -r '
   .context_window.used_percentage as $ctx
   | .rate_limits.five_hour as $h5
   | .rate_limits.seven_day as $d7
-  | if ($ctx // $h5.used_percentage // $d7.used_percentage) == null then empty
-    else [ pct($ctx),
-           "\(pct($h5.used_percentage))\(when($h5.resets_at; hm(.)))",
-           "\(pct($d7.used_percentage))\(when($d7.resets_at; stamp(.)))"
-         ] | join(" - ")
-    end'
+  | ([.model.display_name // .model.id, .effort.level] | map(select(. != null)) | join(" ")) as $model
+  | [ (if $model == "" then empty else $model end),
+      (if ($ctx // $h5.used_percentage // $d7.used_percentage) == null then empty
+       else pct($ctx),
+            "\(pct($h5.used_percentage))\(when($h5.resets_at; hm(.)))",
+            "\(pct($d7.used_percentage))\(when($d7.resets_at; stamp(.)))"
+       end)
+    ] | join(" - ")'
