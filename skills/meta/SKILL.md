@@ -26,7 +26,7 @@ Pick the one the user wants — ask only if genuinely ambiguous. Don't run all f
 Read `metawork.md`, scan the real tree (`CLAUDE.md`, `.claude/`, top-level dirs), and flag decisions the current structure contradicts. A drifted decision record is worse than none because it still gets trusted. Propose either fixing the tree or logging a superseding decision.
 
 ### 2. Audit structure
-Surface concrete, prioritized findings — a short list with reasoning, not a wall of text — and let the user pick:
+Surface a short, prioritized list of findings with reasoning, and let the user pick:
 - **CLAUDE.md bloat** — keep it under ~200 lines. Reference material belongs in on-demand skills or imports, not the always-loaded root file.
 - **Skill/rule/hook mismatches** — a manual check that should be a hook, a convention buried in prose that should be a rule, a workflow that should be a skill.
 - **Subdirectory CLAUDE.md files** — these auto-load when working in that subtree. Confirm that's intended and that they carry module context, not general docs.
@@ -49,10 +49,10 @@ Report the project's current structure and meta components. Read-only: this mode
 - MCP servers, if configured.
 - `metawork.md` — the most recent decisions and anything currently in Exploring.
 
-Mention drift you notice in passing, but don't fix it here — offer Reconcile or Audit instead.
+Mention drift in passing and offer Reconcile or Audit.
 
 ## Boundaries
 
 - If the user drifts into feature implementation, that's fine — say you're leaving meta mode so the gear-change is explicit.
-- Edits to `CLAUDE.md`, skills, rules, and hooks are normal edits; make them directly. Decision entries are the exception that needs confirmation first.
+- Edits to `CLAUDE.md`, skills, rules, and hooks are normal edits; make them directly.
 - Don't let `metawork.md` be imported into `CLAUDE.md`'s always-loaded path. A single pointer line there is enough.
