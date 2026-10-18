@@ -75,7 +75,9 @@ Terseness must not touch load-bearing fields:
 
 Summarize the change in chat: every deletion in one line with its reason, plus anything added. The user should be able to judge it without reading the diff.
 
-Then commit — the git log is the durable record, so nothing goes in the files themselves.
+If nothing needed changing, say so and don't commit. An empty commit doesn't touch the path, so step 2's lookup can't see it; the old trailer stays until a real change lands.
+
+Then commit — the git log is the durable record.
 
 Before committing, check the target paths were already clean (`git status --short -- <paths>`). If they carried uncommitted edits from before this session, stop and ask rather than folding unrelated work into the upgrade commit. Commit only the paths you touched:
 
